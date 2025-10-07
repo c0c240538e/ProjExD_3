@@ -140,7 +140,22 @@ class Bomb:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
 
+class Score:
 
+    def __init__(self,):
+        # フォント設定
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.color = (0, 0, 255)
+        # 初期スコア
+        self.value = 0
+        # 初期文字列Surface
+        self.img = self.fonto.render("スコア:", 0, self.color)
+        # 文字列の位置：画面左下（横100, 縦=HEIGHT-50）
+        self.rct = self.img.get_rect(center=(100, HEIGHT - 50))
+        
+    def update(self,screen:pg.Surface):
+        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
+        screen.blit(self.img, self.rct)
 
 
 def main():
@@ -148,6 +163,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
+    score = Score() 
     # bomb = Bomb((255, 0, 0), 10)
     # bombs = []  # 爆弾用の空のリスト
     # for _ in range(NUM_OF_BOMBS):  # NUM_OF_BOMBS個の爆弾を追加
@@ -170,6 +186,10 @@ def main():
         for bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
+                fonto = pg.font.Font(None, 80)
+                txt = fonto.render("Game Over", True, (255, 0, 0))
+                screen.blit(txt, [WIDTH//2-150, HEIGHT//2])
+                bird.change_img(8, screen)
                 bird.change_img(8, screen)
                 pg.display.update()
                 time.sleep(1)
@@ -181,6 +201,8 @@ def main():
                     # ビームと爆弾の衝突判定
                     beam, bombs[b] = None, None
                     bird.change_img(6, screen)
+                    score.value += 1
+                    
         bombs = [bomb for bomb in bombs if bomb is not None]
 
         key_lst = pg.key.get_pressed()
@@ -189,9 +211,11 @@ def main():
             beam.update(screen)   
         for bomb in bombs:
             bomb.update(screen)
+        score.update(screen) 
         pg.display.update()
         tmr += 1
         clock.tick(50)
+        
 
 
 if __name__ == "__main__":
@@ -199,3 +223,4 @@ if __name__ == "__main__":
     main()
     pg.quit()
     sys.exit()
+
