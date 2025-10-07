@@ -143,19 +143,15 @@ class Bomb:
 class Score:
 
     def __init__(self,):
-        # フォント設定
-        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
-        self.color = (0, 0, 255)
-        # 初期スコア
-        self.value = 0
-        # 初期文字列Surface
-        self.img = self.fonto.render("スコア:", 0, self.color)
-        # 文字列の位置：画面左下（横100, 縦=HEIGHT-50）
-        self.rct = self.img.get_rect(center=(100, HEIGHT - 50))
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)  # フォント設定
+        self.color = (0, 0, 255)  #文字色設定
+        self.value = 0  # 初期スコア
+        self.img = self.fonto.render("score:", 0, self.color)    # 文字列Surfaceの生成
+        self.rct = self.img.get_rect(center=(100, HEIGHT - 50))  # 文字列の中心座標
         
     def update(self,screen:pg.Surface):
-        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
-        screen.blit(self.img, self.rct)
+        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)  #  現在のスコアを表示
+        screen.blit(self.img, self.rct) 
 
 
 def main():
@@ -163,7 +159,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
-    score = Score() 
+    score = Score()  # インスタンスの生成
     # bomb = Bomb((255, 0, 0), 10)
     # bombs = []  # 爆弾用の空のリスト
     # for _ in range(NUM_OF_BOMBS):  # NUM_OF_BOMBS個の爆弾を追加
@@ -200,8 +196,8 @@ def main():
                 if beam.rct.colliderect(bomb.rct):
                     # ビームと爆弾の衝突判定
                     beam, bombs[b] = None, None
-                    bird.change_img(6, screen)
-                    score.value += 1
+                    bird.change_img(6, screen)  
+                    score.value += 1  # スコアアップ
                     
         bombs = [bomb for bomb in bombs if bomb is not None]
 
@@ -211,7 +207,7 @@ def main():
             beam.update(screen)   
         for bomb in bombs:
             bomb.update(screen)
-        score.update(screen) 
+        score.update(screen)  # updateメソッドを呼び出し
         pg.display.update()
         tmr += 1
         clock.tick(50)
