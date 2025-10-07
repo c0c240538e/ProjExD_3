@@ -151,7 +151,8 @@ class Score:
         
     def update(self,screen:pg.Surface):
         self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)  #  現在のスコアを表示
-        screen.blit(self.img, self.rct) 
+        screen.blit(self.img, self.rct)  # スクリーンにblit
+
 
 
 def main():
